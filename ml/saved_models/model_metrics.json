@@ -1,0 +1,21 @@
+{
+    "model_version": "RandomForest_v1.0 + IsolationForest_v1.0",
+    "trained_at": "2026-10-30 21:44:06",
+    "total_dataset_rows": 4032,
+    "train_samples": 3220,
+    "test_samples": 806,
+    "density_metrics": {
+        "mae": 10.475,
+        "rmse": 15.235,
+        "r2_score": 0.7823
+    },
+    "speed_metrics": {
+        "mae": 8.115,
+        "rmse": 11.293,
+        "r2_score": 0.7041
+    },
+    "anomaly_metrics": {
+        "contamination_rate": 0.035,
+        "detected_in_training": 141
+    }
+}

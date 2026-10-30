@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Traffic Map | Smart City Traffic AI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Leaflet.js CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">🚦</div>
+      <div>
+        <div class="brand-title">SmartTraffic AI</div>
+        <div class="brand-subtitle">STREAMING & ML ENGINE</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main Analytics</div>
+      <a href="index.html" class="nav-link">
+        <span>📊</span> Overview Dashboard
+      </a>
+      <a href="traffic.html" class="nav-link">
+        <span>🚗</span> Live Traffic Monitoring
+      </a>
+      <a href="map.html" class="nav-link active">
+        <span>🗺️</span> Interactive Map
+      </a>
+
+      <div class="nav-label">Machine Learning</div>
+      <a href="predictions.html" class="nav-link">
+        <span>🔮</span> Prediction Analytics
+      </a>
+      <a href="anomalies.html" class="nav-link">
+        <span>⚠️</span> Anomaly Detection
+      </a>
+
+      <div class="nav-label">Intelligence & Ops</div>
+      <a href="history.html" class="nav-link">
+        <span>📈</span> Historical Analytics
+      </a>
+      <a href="status.html" class="nav-link">
+        <span>⚙️</span> System Status
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div>Backend: <strong>FastAPI :8000</strong></div>
+      <div style="margin-top: 4px;">Stream: <strong>Kafka / Queue</strong></div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-title">
+        <h1>Interactive Traffic Map</h1>
+        <p>Geospatial telemetry visualization across monitored road corridors</p>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="stream-status-pill" id="stream-status-pill">
+          <span class="status-dot"></span>
+          <span id="stream-status-text">CONNECTING</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-area">
+
+      <!-- Disclaimer Banner -->
+      <div class="map-disclaimer">
+        <span>ℹ️</span>
+        <div>
+          <strong>Simulated Sensor Notice:</strong> Geospatial coordinates represent simulated arterial corridors across a metropolitan testbed. Telemetry and congestion markers are driven live by the real-time Kafka & ML streaming engine.
+        </div>
+      </div>
+
+      <!-- Map Container Card -->
+      <section class="dashboard-card" style="padding: 1.25rem;">
+        <div class="card-header-row" style="margin-bottom: 0.75rem;">
+          <div>
+            <div class="card-title">Urban Sensor Corridors</div>
+            <div class="card-subtitle">Click on any marker or dashed corridor line to view live telemetry and 15-minute predictions</div>
+          </div>
+          <!-- Legend -->
+          <div style="display:flex; gap:0.75rem; align-items:center; font-size:0.75rem; flex-wrap:wrap;">
+            <span style="display:flex; align-items:center; gap:0.3rem;"><span style="width:10px; height:10px; border-radius:50%; background:#10b981; display:inline-block;"></span> Low Flow (&lt;35%)</span>
+            <span style="display:flex; align-items:center; gap:0.3rem;"><span style="width:10px; height:10px; border-radius:50%; background:#f59e0b; display:inline-block;"></span> Moderate (35-65%)</span>
+            <span style="display:flex; align-items:center; gap:0.3rem;"><span style="width:10px; height:10px; border-radius:50%; background:#f97316; display:inline-block;"></span> Heavy (65-85%)</span>
+            <span style="display:flex; align-items:center; gap:0.3rem;"><span style="width:10px; height:10px; border-radius:50%; background:#ef4444; display:inline-block;"></span> Severe (&gt;85%)</span>
+          </div>
+        </div>
+
+        <div id="traffic-map"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/map.js"></script>
+</body>
+</html>
+

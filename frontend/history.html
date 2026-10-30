@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historical Analytics | Smart City Traffic AI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">🚦</div>
+      <div>
+        <div class="brand-title">SmartTraffic AI</div>
+        <div class="brand-subtitle">STREAMING & ML ENGINE</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main Analytics</div>
+      <a href="index.html" class="nav-link">
+        <span>📊</span> Overview Dashboard
+      </a>
+      <a href="traffic.html" class="nav-link">
+        <span>🚗</span> Live Traffic Monitoring
+      </a>
+      <a href="map.html" class="nav-link">
+        <span>🗺️</span> Interactive Map
+      </a>
+
+      <div class="nav-label">Machine Learning</div>
+      <a href="predictions.html" class="nav-link">
+        <span>🔮</span> Prediction Analytics
+      </a>
+      <a href="anomalies.html" class="nav-link">
+        <span>⚠️</span> Anomaly Detection
+      </a>
+
+      <div class="nav-label">Intelligence & Ops</div>
+      <a href="history.html" class="nav-link active">
+        <span>📈</span> Historical Analytics
+      </a>
+      <a href="status.html" class="nav-link">
+        <span>⚙️</span> System Status
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div>Backend: <strong>FastAPI :8000</strong></div>
+      <div style="margin-top: 4px;">Stream: <strong>Kafka / Queue</strong></div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-title">
+        <h1>Historical Analytics</h1>
+        <p>Diurnal rush-hour profiles, multi-day traffic patterns & corridor performance</p>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="stream-status-pill" id="stream-status-pill">
+          <span class="status-dot"></span>
+          <span id="stream-status-text">CONNECTING</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-area">
+
+      <!-- Historical Trends & Comparisons Grid -->
+      <section class="grid-2-col">
+        <div class="dashboard-card">
+          <div class="card-header-row">
+            <div>
+              <div class="card-title">Peak Rush Hour Traffic Profile (24-Hour Cycle)</div>
+              <div class="card-subtitle">Aggregated diurnal distribution of vehicle counts and traffic density</div>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="hourlyTrendsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-header-row">
+            <div>
+              <div class="card-title">Corridor Benchmark Comparison</div>
+              <div class="card-subtitle">Average recorded speed vs traffic density load per road</div>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="roadComparisonChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Daily Traffic Statistics Table -->
+      <section class="dashboard-card">
+        <div class="card-header-row">
+          <div>
+            <div class="card-title">Daily Historical Traffic Aggregates</div>
+            <div class="card-subtitle">Multi-day historical summaries stored in traffic_events database</div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Total Volume Monitored</th>
+                <th>Network Avg Speed</th>
+                <th>High/Severe Congestion Incidents</th>
+                <th>Observed Peak Windows</th>
+              </tr>
+            </thead>
+            <tbody id="daily-stats-tbody">
+              <tr><td colspan="5" style="text-align:center; color:#64748b; padding:1.5rem;">Loading daily historical analytics...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/history.js"></script>
+</body>
+</html>
+

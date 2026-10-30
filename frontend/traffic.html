@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Traffic Monitoring | Smart City Traffic AI</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">🚦</div>
+      <div>
+        <div class="brand-title">SmartTraffic AI</div>
+        <div class="brand-subtitle">STREAMING & ML ENGINE</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main Analytics</div>
+      <a href="index.html" class="nav-link">
+        <span>📊</span> Overview Dashboard
+      </a>
+      <a href="traffic.html" class="nav-link active">
+        <span>🚗</span> Live Traffic Monitoring
+      </a>
+      <a href="map.html" class="nav-link">
+        <span>🗺️</span> Interactive Map
+      </a>
+
+      <div class="nav-label">Machine Learning</div>
+      <a href="predictions.html" class="nav-link">
+        <span>🔮</span> Prediction Analytics
+      </a>
+      <a href="anomalies.html" class="nav-link">
+        <span>⚠️</span> Anomaly Detection
+      </a>
+
+      <div class="nav-label">Intelligence & Ops</div>
+      <a href="history.html" class="nav-link">
+        <span>📈</span> Historical Analytics
+      </a>
+      <a href="status.html" class="nav-link">
+        <span>⚙️</span> System Status
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div>Backend: <strong>FastAPI :8000</strong></div>
+      <div style="margin-top: 4px;">Stream: <strong>Kafka / Queue</strong></div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-title">
+        <h1>Live Traffic Monitoring</h1>
+        <p>Continuous road sensor feeds, congestion telemetry & filtering controls</p>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="stream-status-pill" id="stream-status-pill">
+          <span class="status-dot"></span>
+          <span id="stream-status-text">CONNECTING</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-area">
+
+      <!-- Filter Controls Bar -->
+      <section class="filter-bar">
+        <div class="filter-group">
+          <label for="filter-road">Corridor / Road</label>
+          <select id="filter-road" class="custom-select">
+            <option value="ALL">All Monitored Roads</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-congestion">Congestion Level</label>
+          <select id="filter-congestion" class="custom-select">
+            <option value="ALL">All Levels</option>
+            <option value="LOW">LOW (Free-Flow)</option>
+            <option value="MEDIUM">MEDIUM (Moderate)</option>
+            <option value="HIGH">HIGH (Heavy)</option>
+            <option value="SEVERE">SEVERE (Critical)</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-hours">Time Window</label>
+          <select id="filter-hours" class="custom-select">
+            <option value="1">Last 1 Hour</option>
+            <option value="6">Last 6 Hours</option>
+            <option value="24" selected>Last 24 Hours</option>
+            <option value="72">Last 3 Days</option>
+          </select>
+        </div>
+
+        <div style="display:flex; gap:0.5rem; align-self:flex-end;">
+          <button id="btn-apply-filter" class="btn-primary">Apply Filter</button>
+          <button id="btn-reset-filter" class="btn-primary" style="background:#334155;">Reset</button>
+        </div>
+      </section>
+
+      <!-- Road Status Live Cards Grid -->
+      <section>
+        <div style="font-size:0.9rem; font-weight:600; color:#94a3b8; margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:0.5px;">
+          Active Urban Corridors
+        </div>
+        <div class="kpi-grid" id="road-cards-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Detailed Telemetry Stream Table -->
+      <section class="dashboard-card">
+        <div class="card-header-row">
+          <div>
+            <div class="card-title">Live Telemetry Event Log</div>
+            <div class="card-subtitle">Real-time incoming vehicle counts, speeds, and classified congestion states</div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Road ID</th>
+                <th>Corridor Name & Location</th>
+                <th>Timestamp</th>
+                <th>Vehicle Count</th>
+                <th>Average Speed</th>
+                <th>Density</th>
+                <th>Congestion Level</th>
+              </tr>
+            </thead>
+            <tbody id="traffic-telemetry-tbody">
+              <tr><td colspan="7" style="text-align:center; color:#64748b; padding:1.5rem;">Loading live telemetry events...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/traffic.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anomaly Detection | Smart City Traffic AI</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">🚦</div>
+      <div>
+        <div class="brand-title">SmartTraffic AI</div>
+        <div class="brand-subtitle">STREAMING & ML ENGINE</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main Analytics</div>
+      <a href="index.html" class="nav-link">
+        <span>📊</span> Overview Dashboard
+      </a>
+      <a href="traffic.html" class="nav-link">
+        <span>🚗</span> Live Traffic Monitoring
+      </a>
+      <a href="map.html" class="nav-link">
+        <span>🗺️</span> Interactive Map
+      </a>
+
+      <div class="nav-label">Machine Learning</div>
+      <a href="predictions.html" class="nav-link">
+        <span>🔮</span> Prediction Analytics
+      </a>
+      <a href="anomalies.html" class="nav-link active">
+        <span>⚠️</span> Anomaly Detection
+      </a>
+
+      <div class="nav-label">Intelligence & Ops</div>
+      <a href="history.html" class="nav-link">
+        <span>📈</span> Historical Analytics
+      </a>
+      <a href="status.html" class="nav-link">
+        <span>⚙️</span> System Status
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div>Backend: <strong>FastAPI :8000</strong></div>
+      <div style="margin-top: 4px;">Stream: <strong>Kafka / Queue</strong></div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-title">
+        <h1>Anomaly Detection</h1>
+        <p>Isolation Forest unsupervised pattern detection & real-time hazard identification</p>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="stream-status-pill" id="stream-status-pill">
+          <span class="status-dot"></span>
+          <span id="stream-status-text">CONNECTING</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-area">
+
+      <!-- KPI Anomaly Cards -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Total Anomalies Flagged</span>
+            <span class="kpi-icon">🚨</span>
+          </div>
+          <div class="kpi-value" id="kpi-total-anomalies" style="color:#ef4444;">0</div>
+          <div class="kpi-subtext">Detected by Isolation Forest</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Critical Standstills</span>
+            <span class="kpi-icon">🛑</span>
+          </div>
+          <div class="kpi-value" id="kpi-standstills" style="color:#f97316;">0</div>
+          <div class="kpi-subtext">Potential accidents & bottlenecks</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Volume Surges</span>
+            <span class="kpi-icon">📈</span>
+          </div>
+          <div class="kpi-value" id="kpi-surges" style="color:#f59e0b;">0</div>
+          <div class="kpi-subtext">Sudden vehicle count spikes</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Speed Drop Hazards</span>
+            <span class="kpi-icon">⚠️</span>
+          </div>
+          <div class="kpi-value" id="kpi-speed-drops" style="color:#a855f7;">0</div>
+          <div class="kpi-subtext">Sharp deceleration vs rolling avg</div>
+        </div>
+      </section>
+
+      <!-- Filter Controls Bar -->
+      <section class="filter-bar">
+        <div class="filter-group">
+          <label for="filter-anomaly-road">Corridor</label>
+          <select id="filter-anomaly-road" class="custom-select">
+            <option value="ALL">All Roads</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-anomaly-status">Alert Status</label>
+          <select id="filter-anomaly-status" class="custom-select">
+            <option value="ALL">All Alerts</option>
+            <option value="ACTIVE" selected>ACTIVE</option>
+            <option value="RESOLVED">RESOLVED</option>
+          </select>
+        </div>
+
+        <div style="align-self:flex-end;">
+          <button id="btn-filter-anomalies" class="btn-primary">Filter Anomalies</button>
+        </div>
+      </section>
+
+      <!-- Anomalies Table -->
+      <section class="dashboard-card">
+        <div class="card-header-row">
+          <div>
+            <div class="card-title">Detected Unusual Traffic Events</div>
+            <div class="card-subtitle">Events categorized as statistical outliers by Isolation Forest with diagnostic reasoning</div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Road ID</th>
+                <th>Corridor Name</th>
+                <th>Timestamp</th>
+                <th>Vehicle Count</th>
+                <th>Average Speed</th>
+                <th>Traffic Density</th>
+                <th>Anomaly Score & Diagnosis</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="anomalies-tbody">
+              <tr><td colspan="8" style="text-align:center; color:#64748b; padding:1.5rem;">Loading anomalies log...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/anomalies.js"></script>
+</body>
+</html>
+

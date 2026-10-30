@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv/
+env.bak/
+venv.bak/
+
+# Environment variables
+.env
+
+# Database
+*.db
+*.db-wal
+*.db-shm
+*.sqlite3
+
+# Models
+ml/saved_models/*.joblib
+!ml/saved_models/.gitkeep
+
+# Logs & temp
+*.log
+.DS_Store
+Thumbs.db
+

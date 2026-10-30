@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prediction Analytics | Smart City Traffic AI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">🚦</div>
+      <div>
+        <div class="brand-title">SmartTraffic AI</div>
+        <div class="brand-subtitle">STREAMING & ML ENGINE</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main Analytics</div>
+      <a href="index.html" class="nav-link">
+        <span>📊</span> Overview Dashboard
+      </a>
+      <a href="traffic.html" class="nav-link">
+        <span>🚗</span> Live Traffic Monitoring
+      </a>
+      <a href="map.html" class="nav-link">
+        <span>🗺️</span> Interactive Map
+      </a>
+
+      <div class="nav-label">Machine Learning</div>
+      <a href="predictions.html" class="nav-link active">
+        <span>🔮</span> Prediction Analytics
+      </a>
+      <a href="anomalies.html" class="nav-link">
+        <span>⚠️</span> Anomaly Detection
+      </a>
+
+      <div class="nav-label">Intelligence & Ops</div>
+      <a href="history.html" class="nav-link">
+        <span>📈</span> Historical Analytics
+      </a>
+      <a href="status.html" class="nav-link">
+        <span>⚙️</span> System Status
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div>Backend: <strong>FastAPI :8000</strong></div>
+      <div style="margin-top: 4px;">Stream: <strong>Kafka / Queue</strong></div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-title">
+        <h1>Prediction Analytics</h1>
+        <p>Random Forest Regressor multi-step forecasts & offline validation metrics</p>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="stream-status-pill" id="stream-status-pill">
+          <span class="status-dot"></span>
+          <span id="stream-status-text">CONNECTING</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-area">
+
+      <!-- Model Performance & Evaluation Metrics Cards -->
+      <section>
+        <div style="font-size:0.9rem; font-weight:600; color:#94a3b8; margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:0.5px;">
+          Model Evaluation Metrics (Holdout Test Set)
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span>Density Model R²</span>
+              <span class="kpi-icon">🎯</span>
+            </div>
+            <div class="kpi-value" id="eval-r2-density" style="color:#10b981;">0.78</div>
+            <div class="kpi-subtext">Coefficient of Determination</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span>Density MAE</span>
+              <span class="kpi-icon">📉</span>
+            </div>
+            <div class="kpi-value" id="eval-mae-density">9.9%</div>
+            <div class="kpi-subtext">Mean Absolute Error</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span>Speed Model R²</span>
+              <span class="kpi-icon">⚡</span>
+            </div>
+            <div class="kpi-value" id="eval-r2-speed" style="color:#06b6d4;">0.71</div>
+            <div class="kpi-subtext">Speed prediction fit</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span>Speed MAE</span>
+              <span class="kpi-icon">🚗</span>
+            </div>
+            <div class="kpi-value" id="eval-mae-speed">7.5 km/h</div>
+            <div class="kpi-subtext">Velocity variance margin</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span>Training Samples</span>
+              <span class="kpi-icon">📚</span>
+            </div>
+            <div class="kpi-value" id="eval-dataset-samples">4,032</div>
+            <div class="kpi-subtext">Historical dataset events</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span>Model Architecture</span>
+              <span class="kpi-icon">🌲</span>
+            </div>
+            <div class="kpi-value" style="font-size:1.15rem; color:#a855f7;">RF 120-Tree</div>
+            <div class="kpi-subtext" id="eval-trained-date">Joblib Serialized</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Historical vs Predicted Trend Chart -->
+      <section class="dashboard-card">
+        <div class="card-header-row">
+          <div>
+            <div class="card-title">Observed vs 15-Minute Projected Traffic Density</div>
+            <div class="card-subtitle">Continuous time-series tracking historical actuals into future horizon forecasts</div>
+          </div>
+          <span class="badge badge-medium">HORIZON: +15 MINS</span>
+        </div>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="historicalVsPredictedChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Road-wise Future Predictions Table -->
+      <section class="dashboard-card">
+        <div class="card-header-row">
+          <div>
+            <div class="card-title">Road-wise ML Forecasts Log</div>
+            <div class="card-subtitle">Live Random Forest inferences generated for incoming telemetry streams</div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Road Corridor</th>
+                <th>Inference Time</th>
+                <th>Target Forecast Time</th>
+                <th>Predicted Density</th>
+                <th>Predicted Speed</th>
+                <th>Predicted Congestion</th>
+                <th>Confidence Score</th>
+              </tr>
+            </thead>
+            <tbody id="predictions-tbody">
+              <tr><td colspan="7" style="text-align:center; color:#64748b; padding:1.5rem;">Loading predictions...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/predictions.js"></script>
+</body>
+</html>
+

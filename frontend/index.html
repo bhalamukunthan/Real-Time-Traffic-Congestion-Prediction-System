@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart City Traffic Analytics | Real-Time Prediction System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">🚦</div>
+      <div>
+        <div class="brand-title">SmartTraffic AI</div>
+        <div class="brand-subtitle">STREAMING & ML ENGINE</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main Analytics</div>
+      <a href="index.html" class="nav-link active">
+        <span>📊</span> Overview Dashboard
+      </a>
+      <a href="traffic.html" class="nav-link">
+        <span>🚗</span> Live Traffic Monitoring
+      </a>
+      <a href="map.html" class="nav-link">
+        <span>🗺️</span> Interactive Map
+      </a>
+
+      <div class="nav-label">Machine Learning</div>
+      <a href="predictions.html" class="nav-link">
+        <span>🔮</span> Prediction Analytics
+      </a>
+      <a href="anomalies.html" class="nav-link">
+        <span>⚠️</span> Anomaly Detection
+      </a>
+
+      <div class="nav-label">Intelligence & Ops</div>
+      <a href="history.html" class="nav-link">
+        <span>📈</span> Historical Analytics
+      </a>
+      <a href="status.html" class="nav-link">
+        <span>⚙️</span> System Status
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div>Backend: <strong>FastAPI :8000</strong></div>
+      <div style="margin-top: 4px;">Stream: <strong>Kafka / Queue</strong></div>
+    </div>
+  </aside>
+
+  <!-- Main Workspace Wrapper -->
+  <div class="main-wrapper">
+    <!-- Top Navigation Header -->
+    <header class="topbar">
+      <div class="topbar-title">
+        <h1>Overview Dashboard</h1>
+        <p>Real-time traffic telemetry, ML congestion forecasts & streaming analytics</p>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="stream-status-pill" id="stream-status-pill">
+          <span class="status-dot"></span>
+          <span id="stream-status-text">CONNECTING</span>
+        </div>
+        <a href="http://127.0.0.1:8000/docs" target="_blank" class="btn-primary" style="text-decoration: none;">API Docs</a>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="content-area">
+
+      <!-- 6 KPI Cards -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Total Vehicles</span>
+            <span class="kpi-icon">🚗</span>
+          </div>
+          <div class="kpi-value" id="kpi-total-vehicles">--</div>
+          <div class="kpi-subtext">Monitored across corridors</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Average Speed</span>
+            <span class="kpi-icon">⚡</span>
+          </div>
+          <div class="kpi-value" id="kpi-avg-speed">-- km/h</div>
+          <div class="kpi-subtext">Rolling network average</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Active Roads</span>
+            <span class="kpi-icon">🛣️</span>
+          </div>
+          <div class="kpi-value" id="kpi-active-roads">6 Roads</div>
+          <div class="kpi-subtext">Urban sensor corridors</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Congested Roads</span>
+            <span class="kpi-icon">🛑</span>
+          </div>
+          <div class="kpi-value" id="kpi-congested-roads" style="color:#ef4444;">--</div>
+          <div class="kpi-subtext">High or Severe status</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Average Density</span>
+            <span class="kpi-icon">📊</span>
+          </div>
+          <div class="kpi-value" id="kpi-avg-density">--%</div>
+          <div class="kpi-subtext">Network capacity load</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>Active Alerts</span>
+            <span class="kpi-icon">⚠️</span>
+          </div>
+          <div class="kpi-value" id="kpi-active-alerts" style="color:#f59e0b;">0</div>
+          <div class="kpi-subtext">Isolation Forest flags</div>
+        </div>
+      </section>
+
+      <!-- Row 1: Live Speed/Density Stream & Congestion Distribution -->
+      <section class="grid-2-col">
+        <div class="dashboard-card">
+          <div class="card-header-row">
+            <div>
+              <div class="card-title">Live Speed & Density Telemetry</div>
+              <div class="card-subtitle">Real-time rolling window streaming updates (Kafka consumer)</div>
+            </div>
+            <span class="badge badge-low">STREAM ACTIVE</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="speedDensityChart"></canvas>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-header-row">
+            <div>
+              <div class="card-title">Congestion Level Breakdown</div>
+              <div class="card-subtitle">Distribution across Low, Moderate, High, Severe</div>
+            </div>
+          </div>
+          <div class="chart-container" style="height: 280px;">
+            <canvas id="congestionDonutChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Row 2: Vehicle Count Per Road & 15-Minute ML Prediction -->
+      <section class="grid-2-col">
+        <div class="dashboard-card">
+          <div class="card-header-row">
+            <div>
+              <div class="card-title">Active Vehicles by Corridor</div>
+              <div class="card-subtitle">Live road traffic volume comparison</div>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="vehicleCountChart"></canvas>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-header-row">
+            <div>
+              <div class="card-title">15-Min Future Prediction Forecast</div>
+              <div class="card-subtitle">Random Forest Regressor multi-step density projection</div>
+            </div>
+            <span class="badge badge-medium">ML v1.0</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="predictionTrendChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Row 3: Recent Events Table & Anomaly Alerts -->
+      <section class="grid-2-col">
+        <div class="dashboard-card">
+          <div class="card-header-row">
+            <div>
+              <div class="card-title">Recent Streamed Traffic Events</div>
+              <div class="card-subtitle">Latest raw events processed through pipeline</div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Road</th>
+                  <th>Time</th>
+                  <th>Vehicles</th>
+                  <th>Speed</th>
+                  <th>Density</th>
+                  <th>Congestion</th>
+                </tr>
+              </thead>
+              <tbody id="recent-events-tbody">
+                <tr><td colspan="6" style="text-align:center; color:#64748b; padding:1.5rem;">Awaiting telemetry stream...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-header-row">
+            <div>
+              <div class="card-title">Recent Anomaly & Hazard Alerts</div>
+              <div class="card-subtitle">Detected by Isolation Forest & real-time heuristic filters</div>
+            </div>
+          </div>
+          <div id="recent-anomalies-container" style="min-height: 200px;">
+            <div style="color:#64748b; font-size:0.85rem; padding: 1.5rem 0; text-align: center;">Awaiting telemetry data...</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
+
